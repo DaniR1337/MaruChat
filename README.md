@@ -1,5 +1,6 @@
 # MaruChat
 Proyecto IE0527
 
-![image](https://github.com/DaniR1337/MaruChat/assets/93664317/9d7788c8-9d6c-4dc6-b453-35155d7a1b3f)
+![MARUCHAT](https://github.com/DaniR1337/MaruChat/assets/93664317/54ccfb35-3791-4e25-b439-e56ba604c1c3)
+
 Logo

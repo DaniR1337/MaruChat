@@ -6,18 +6,21 @@ from time import sleep
 
 host = '127.0.0.1'
 port = 55555
-
-def red_button_click():
-    red_button.destroy()
-    black_button.destroy()
-    label.config(text="You're hosting as server!")
-    sleep(1)
+nickname = "Guest" # Default nickname
 
 def black_button_click():
     label.config(text="Joined room!")
-    red_button.destroy()
     black_button.destroy()
-    client.client_req(host, port)
+    button.destroy()
+    entry.destroy()
+    client.client_req(host, port, nickname)
+
+def change_nickname():
+    new_nickname = entry.get()  # Get the new nickname from the entry widget
+    global nickname
+    nickname = new_nickname  # Update the global nickname variable
+    label.config(text="Nickname: " + nickname)  # Update the label text
+
 
 # Create the main window
 window = tk.Tk()
@@ -52,12 +55,20 @@ type_gif_label.place(x=window.winfo_screenwidth() - 100, y=window.winfo_screenhe
 type_gif_label.image = type_gif_tk
 
 # Create a label widget
-label = tk.Label(window, text="Welcome!", bg="white", fg="black")
+label = tk.Label(window, text="Welcome! "+nickname, bg="white", fg="black")
 label.pack()
 
 # Create a red button widget
-red_button = tk.Button(window, text="Host as server", command=red_button_click, bg="red", fg="white")
-red_button.pack()
+#red_button = tk.Button(window, text="Host as server", command=red_button_click, bg="red", fg="white")
+#red_button.pack()
+
+# Create an entry widget for entering the new nickname
+entry = tk.Entry(window)
+entry.pack()
+
+# Create a button to change the nickname
+button = tk.Button(window, text="Change Nickname", command=change_nickname, bg="red", fg="white")
+button.pack()
 
 # Create a black button widget
 black_button = tk.Button(window, text="Join room!", command=black_button_click, bg="black", fg="white")

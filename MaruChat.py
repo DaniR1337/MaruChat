@@ -1,5 +1,5 @@
 import socket
-import client
+import threading
 import tkinter as tk
 from PIL import Image, ImageTk
 from time import sleep
@@ -8,12 +8,41 @@ host = '127.0.0.1'
 port = 55555
 nickname = "Guest" # Default nickname
 
+def client_req(host, port, nickname):
+
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect((host, port))
+
+    def receive():
+        while True:
+            try:
+                message = client.recv(1024).decode('ascii')
+                if message == 'NICK':
+                    client.send(nickname.encode('ascii'))
+                else:
+                    print(message)
+            except:
+                print('An error occurred')
+                client.close()
+                break
+
+    def write():
+        while True:
+            message = f'{nickname}: {input("")}'
+            client.send(message.encode('ascii'))
+
+    receive_thread = threading.Thread(target=receive)
+    receive_thread.start()
+
+    write_thread = threading.Thread(target=write)
+    write_thread.start()
+
 def black_button_click():
     label.config(text="Joined room!")
     black_button.destroy()
     button.destroy()
     entry.destroy()
-    client.client_req(host, port, nickname)
+    client_req(host, port, nickname)
 
 def change_nickname():
     new_nickname = entry.get()  # Get the new nickname from the entry widget

@@ -1,18 +1,23 @@
 import socket
-import MaruChat_server as server
-import MaruChat_client as client
+import client
 import tkinter as tk
 from PIL import Image, ImageTk
+from time import sleep
+
+host = '127.0.0.1'
+port = 55555
 
 def red_button_click():
-    label.config(text="Room created!")
     red_button.destroy()
     black_button.destroy()
+    label.config(text="You're hosting as server!")
+    sleep(1)
 
 def black_button_click():
     label.config(text="Joined room!")
     red_button.destroy()
     black_button.destroy()
+    client.client_req(host, port)
 
 # Create the main window
 window = tk.Tk()
@@ -51,15 +56,15 @@ label = tk.Label(window, text="Welcome!", bg="white", fg="black")
 label.pack()
 
 # Create a red button widget
-red_button = tk.Button(window, text="Create room", command=red_button_click, bg="red", fg="white")
+red_button = tk.Button(window, text="Host as server", command=red_button_click, bg="red", fg="white")
 red_button.pack()
 
 # Create a black button widget
-black_button = tk.Button(window, text="Join room", command=black_button_click, bg="black", fg="white")
+black_button = tk.Button(window, text="Join room!", command=black_button_click, bg="black", fg="white")
 black_button.pack()
 
 # Create a label widget for the copyright text
-copyright_label = tk.Label(window, text="© 2023 MARUCHAT. All rights reserved.", bg="white", fg="gray")
+copyright_label = tk.Label(window, text="© 2023 MARUCHAT. All rights reserved.", bg="white", fg="gray") # funny haha
 copyright_label.pack()
 
 # Start the GUI event loop

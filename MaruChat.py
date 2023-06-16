@@ -68,6 +68,9 @@ def client_req():
     logo_image_label = tk.Label(window, image=logo_image_tk, bg="white")
     logo_image_label.pack()
 
+    copyright_label = tk.Label(window, text="© 2023 MARUCHAT. All rights reserved.", bg="white", fg="gray") # funny haha
+    copyright_label.pack()
+
     # Load and resize the type GIF
     type_gif = Image.open("type.gif")  # Replace "type.gif" with your GIF file
     type_gif = type_gif.resize((100, 100))  # Adjust the size as per your GIF requirements

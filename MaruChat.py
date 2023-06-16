@@ -1,6 +1,7 @@
 import socket
 import threading
 import tkinter as tk
+from tkinter import scrolledtext, END
 from PIL import Image, ImageTk
 from time import sleep
 
@@ -9,7 +10,6 @@ port = 55555
 nickname = "Guest" # Default nickname
 
 def client_req(host, port, nickname):
-
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((host, port))
 
@@ -20,22 +20,43 @@ def client_req(host, port, nickname):
                 if message == 'NICK':
                     client.send(nickname.encode('ascii'))
                 else:
-                    print(message)
+                    update_chatbox(message)  # Update the chatbox with the received message
             except:
                 print('An error occurred')
                 client.close()
                 break
 
-    def write():
-        while True:
-            message = f'{nickname}: {input("")}'
-            client.send(message.encode('ascii'))
+    def write(event=None):  # Modified write function to handle input from the GUI
+        message = f'{nickname}: {input_box.get()}'
+        client.send(message.encode('ascii'))
+        input_box.delete(0, END)  # Clear the input box
 
+    def update_chatbox(message):
+        chat_box.configure(state='normal')
+        chat_box.insert(tk.END, message + '\n')
+        chat_box.configure(state='disabled')
+        chat_box.see(tk.END)  # Scroll to the latest message
+
+    # Create the GUI
+    window = tk.Tk()
+    window.title('Chatbox')
+
+    chat_box = scrolledtext.ScrolledText(window, state='disabled')
+    chat_box.pack(fill=tk.BOTH, expand=True)
+
+    input_box = tk.Entry(window)
+    input_box.pack(side=tk.BOTTOM, fill=tk.X)
+    input_box.bind("<Return>", write)
+
+    # Start the receive and write threads
     receive_thread = threading.Thread(target=receive)
     receive_thread.start()
 
     write_thread = threading.Thread(target=write)
     write_thread.start()
+
+    # Start the GUI main loop
+    window.mainloop()
 
 def black_button_click():
     label.config(text="Joined room!")

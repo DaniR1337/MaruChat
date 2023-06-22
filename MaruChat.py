@@ -16,9 +16,9 @@ def client_req():
     def receive():
         while True:
             try:
-                message = client.recv(1024).decode('ascii')
+                message = client.recv(1024).decode('utf-8')
                 if message == 'NICK':
-                    client.send(nickname.encode('ascii'))
+                    client.send(nickname.encode('utf-8'))
                 else:
                     update_chatbox(message)  # Update the chatbox with the received message
             except:
@@ -28,7 +28,7 @@ def client_req():
 
     def write(event=None):  # Modified write function to handle input from the GUI
         message = f'{nickname}: {input_box.get()}'
-        client.send(message.encode('ascii'))
+        client.send(message.encode('utf-8'))
         input_box.delete(0, END)  # Clear the input box
 
     def update_chatbox(message):
@@ -50,6 +50,9 @@ def client_req():
         nickname = new_nickname  # Update the global nickname variable
         label.config(text="Nickname: " + nickname)  # Update the label text
 
+    def add_emoji(emoji):
+        input_box.insert(tk.END, emoji)  # Insert the selected emoji at the end of the input box
+
     # Create the main window
     window = tk.Tk()
     window.title("MaruChat")  # Set the window title
@@ -68,7 +71,7 @@ def client_req():
     logo_image_label = tk.Label(window, image=logo_image_tk, bg="white")
     logo_image_label.pack()
 
-    copyright_label = tk.Label(window, text="© 2023 MARUCHAT. All rights reserved.", bg="white", fg="gray") # funny haha
+    copyright_label = tk.Label(window, text="© 2023 MARUCHAT. All rights reserved.", bg="white", fg="gray")  # funny haha
     copyright_label.pack()
 
     # Load and resize the type GIF
@@ -109,6 +112,16 @@ def client_req():
     input_box = tk.Entry(window)
     input_box.pack(side=tk.BOTTOM, fill=tk.X)
     input_box.bind("<Return>", write)
+
+    # Create buttons for emoji expressions
+    emoji_buttons_frame = tk.Frame(window, bg="white")
+    emoji_buttons_frame.pack()
+
+    emoji_expressions = ["😃", "😊", "😂", "👍", "👋"]
+
+    for emoji in emoji_expressions:
+        emoji_button = tk.Button(emoji_buttons_frame, text=emoji, command=lambda e=emoji: add_emoji(e), bg="white")
+        emoji_button.pack(side=tk.LEFT)
 
     # Start the receive and write threads
     receive_thread = threading.Thread(target=receive)

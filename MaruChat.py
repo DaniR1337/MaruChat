@@ -5,7 +5,7 @@ from tkinter import scrolledtext, END
 from PIL import Image, ImageTk
 from time import sleep
 
-host = '127.0.0.1'
+host = '192.168.4.2'
 port = 55555
 nickname = "Guest"  # Default nickname
 
